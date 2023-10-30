@@ -1,29 +1,30 @@
 using Newtonsoft.Json;
+using System;
 using System.IO.Compression;
 using System.Net;
 
 namespace EasyInstallerV2
 {
-    class Program
+    public class Installer
     {
-        public const string BASE_URL = "https://manifest.fnbuilds.services";
+        public const string BASE_URL = "https://manifest.blksservers.com";
         private const int CHUNK_SIZE = 536870912 / 8;
-
-        class ChunkedFile
+        public static string PROGRESS = "";
+        public class ChunkedFile
         {
             public List<int> ChunksIds = new();
             public String File = String.Empty;
             public long FileSize = 0;
         }
 
-        class ManifestFile
+        public class ManifestFile
         {
             public String Name = String.Empty;
             public List<ChunkedFile> Chunks = new();
             public long Size = 0;
         }
 
-        static string FormatBytesWithSuffix(long bytes)
+        public static string FormatBytesWithSuffix(long bytes)
         {
             string[] Suffix = { "B", "KB", "MB", "GB", "TB" };
             int i;
@@ -36,7 +37,7 @@ namespace EasyInstallerV2
             return String.Format("{0:0.##} {1}", dblSByte, Suffix[i]);
         }
 
-        static async Task Download(ManifestFile manifest, string version, string resultPath)
+        public static async Task Download(ManifestFile manifest, string version, string resultPath)
         {
             long totalBytes = manifest.Size;
             long completedBytes = 0;
@@ -92,13 +93,14 @@ namespace EasyInstallerV2
                                     Interlocked.Add(ref chunkCompletedBytes, bytesRead);
 
                                     double progress = (double)completedBytes / totalBytes * 100;
-                                    string progressMessage = $"\rDownloaded: {FormatBytesWithSuffix(completedBytes)} / {FormatBytesWithSuffix(totalBytes)} ({progress:F2}%)";
+                                    string progressMessage = $"{FormatBytesWithSuffix(completedBytes)}/{FormatBytesWithSuffix(totalBytes)}";
 
                                     int padding = progressLength - progressMessage.Length;
                                     if (padding > 0)
                                         progressMessage += new string(' ', padding);
 
-                                    Console.Write(progressMessage);
+                                    PROGRESS = progressMessage;
+
                                     progressLength = progressMessage.Length;
                                 }
 
@@ -118,12 +120,13 @@ namespace EasyInstallerV2
                 }
             }));
 
-            Console.WriteLine("\n\nFinished Downloading.\nPress any key to exit!");
-            Thread.Sleep(100);
-            Console.ReadKey();
+          
         }
 
-        static void Main(string[] args)
+    
+        
+
+       /* static void Main(string[] args)
         {
             var httpClient = new WebClient();
 
@@ -170,6 +173,6 @@ namespace EasyInstallerV2
             Console.Write("\n");
 
             Download(manifest, targetVersion, targetPath).GetAwaiter().GetResult();
-        }
+        }*/
     }
 }
