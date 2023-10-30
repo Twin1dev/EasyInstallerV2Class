@@ -1,4 +1,6 @@
-# EasyInstallerV2
+# EasyInstallerV2Class
+
+fork of easyinstallerv2 but its in a class form for launcher usage
 
 ## Want to help cover egress and storage costs? Consider donating [here!](https://paypal.me/blksservers?country.x=US&locale.x=en_US)
 
