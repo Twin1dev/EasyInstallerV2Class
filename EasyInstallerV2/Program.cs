@@ -10,6 +10,8 @@ namespace EasyInstallerV2
         public const string BASE_URL = "https://manifest.blksservers.com";
         private const int CHUNK_SIZE = 536870912 / 8;
         public static string PROGRESS = "";
+        public static string PERCENTSTRING = "";
+        public static double PERCENT = 0.0;
         public class ChunkedFile
         {
             public List<int> ChunksIds = new();
@@ -100,6 +102,9 @@ namespace EasyInstallerV2
                                         progressMessage += new string(' ', padding);
 
                                     PROGRESS = progressMessage;
+                           
+                                    PERCENT = progress;
+
 
                                     progressLength = progressMessage.Length;
                                 }
